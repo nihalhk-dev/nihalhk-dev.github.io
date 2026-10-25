@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Nihal Hamou-Sbira Ktitu, Data Scientist and Machine Learning Engineer focused on finance. Relocating to Switzerland or Canada.">
+<meta property="og:title" content="Nihal Hamou-Sbira Ktitu · Data Scientist & ML Engineer">
+<meta property="og:description" content="ML systems end to end, from raw data to deployed apps. Master's thesis on model performance monitoring (10/10).">
+<meta property="og:type" content="website">
+<title>Nihal Hamou-Sbira Ktitu</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-bleed bands, wide canvas. Espresso ground, beige type, dusty-rose highlights. Serif display, clean sans body, mono for data. */
+:root{
+  --bg:#F3ECE1; --bg2:#EAE0D1; --surface:#FAF6EF; --ink:#2A170C; --muted:#7C6756; --line:#DFD2C0;
+  --tan:#4A2C19; --tan-ink:#FBF6EF; --rose:#F9D5E0; --rose-ink:#EAA8BE; --alarm:#C9405A; --ok:#4A2C19;
+  --display:"Instrument Serif", "Times New Roman", serif;
+  --body:"Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --glow2:#E6D4BC;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#211610; --bg2:#291C14; --surface:#312218; --ink:#F3E7D7; --muted:#C2AA94; --line:#443125;
+  --tan:#E8D2B4; --tan-ink:#211610; --rose:#F9D5E0; --rose-ink:#F4BED0; --alarm:#F07A8E; --ok:#E8D2B4; --glow2:#5A3E2A; color-scheme:dark}
+
+
+*{box-sizing:border-box}
+html,body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1360px;margin:0 auto;padding-left:max(24px, env(safe-area-inset-left,0px));padding-right:max(24px, env(safe-area-inset-right,0px))}
+@media (min-width:900px){.wrap{padding-left:max(56px, env(safe-area-inset-left,0px));padding-right:max(56px, env(safe-area-inset-right,0px))}}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+em{font-family:var(--display);font-style:italic;color:var(--rose-ink);font-weight:400}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 84%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:16px}
+.logo{font-family:var(--display);font-size:26px;text-decoration:none;line-height:1}
+.logo i{color:var(--rose-ink)}
+.links{display:flex;gap:28px;font-size:14.5px}
+.links a{text-decoration:none;color:var(--muted);transition:color .15s}
+.links a:hover{color:var(--ink)}
+.nav-r{display:flex;align-items:center;gap:22px}
+.theme{display:inline-flex;align-items:center;gap:8px;font:500 13px var(--mono);padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.theme .sw{width:30px;height:16px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);position:relative}
+.theme .sw::after{content:"";position:absolute;top:1px;left:1px;width:12px;height:12px;border-radius:50%;background:var(--rose-ink);transition:transform .2s}
+:root[data-theme="dark"] .theme .sw::after{transform:translateX(14px)}
+@media (max-width:680px){.links{display:none}}
+.ticker{border-bottom:1px solid var(--line);background:var(--bg2);overflow:hidden;white-space:nowrap;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.ticker-track{display:inline-flex;gap:44px;padding-block:9px;animation:tick 55s linear infinite}
+.ticker-track>span{flex:none}
+.ticker b{color:var(--ink);font-weight:500}
+.ticker .up{color:var(--tan)} .ticker .dn{color:var(--rose-ink)}
+.ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.hero{min-height:calc(100svh - 120px);display:grid;align-content:center;padding-block:56px;position:relative;isolation:isolate;overflow:hidden}
+.hero::before{content:"";position:absolute;z-index:-1;right:-8%;top:-10%;width:760px;max-width:95vw;aspect-ratio:1;background:radial-gradient(closest-side,color-mix(in srgb,var(--rose) 70%,transparent),transparent 70%);animation:drift 16s ease-in-out infinite alternate;pointer-events:none}
+.hero::after{content:"";position:absolute;z-index:-1;left:-12%;bottom:-20%;width:600px;max-width:90vw;aspect-ratio:1;background:radial-gradient(closest-side,color-mix(in srgb,var(--glow2) 80%,transparent),transparent 70%);animation:drift 20s ease-in-out infinite alternate-reverse;pointer-events:none}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(-70px,50px)}}
+.status{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px;color:var(--tan);background:color-mix(in srgb,var(--rose) 35%,transparent);border:1px solid var(--line);border-radius:999px;padding:7px 14px;margin-bottom:28px;max-width:100%}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--rose);display:block;flex:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--rose) 22%,transparent)}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(56px,10.5vw,168px);line-height:.9;letter-spacing:-.02em}
+.hero-sub{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;margin-top:44px;align-items:start}
+.hero-sub>*{min-width:0}
+.role{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--tan);margin:0 0 16px}
+.pitch{font-size:clamp(19px,1.7vw,23px);line-height:1.5;margin:0 0 28px;max-width:30em}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;font:500 15px var(--body);padding:13px 20px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);text-decoration:none;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
+.btn:hover{transform:translateY(-1px);border-color:var(--rose)}
+.btn.primary{background:var(--tan);border-color:var(--tan);color:var(--tan-ink)}
+.btn.primary:hover{background:var(--rose);border-color:var(--rose);color:#2A170C}
+.mail{font-family:var(--mono);font-size:14px;color:var(--muted);user-select:all}
+@media (max-width:900px){.hero-sub{grid-template-columns:1fr;gap:36px}.hero{min-height:auto}}
+
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px}
+.lab-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.state{font-family:var(--mono);font-size:12.5px;padding:4px 11px;border-radius:999px;border:1px solid var(--line);color:var(--tan)}
+.state.drift{color:var(--ink)} .state.alarm{color:var(--alarm);border-color:var(--alarm)}
+canvas{width:100%;height:220px;display:block;margin-top:14px}
+.meter-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:12px}
+.bar{height:8px;border-radius:6px;background:var(--bg2);overflow:hidden;margin-top:7px}
+.bar b{display:block;height:100%;width:0;background:var(--tan);transition:width .12s linear,background .2s}
+.bar.hot b{background:var(--rose-ink)}
+.lab-ctl{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.lab-ctl .note{font-size:14px;color:var(--muted);flex:1 1 220px}
+
+.band{border-top:1px solid var(--line);padding-block:104px}
+.band.alt{background:var(--bg2)}
+.sec-title{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:44px}
+.sec-title h2{font-family:var(--display);font-weight:400;font-size:clamp(44px,6vw,92px);line-height:.95;letter-spacing:-.01em}
+
+.nums{display:grid;grid-template-columns:repeat(4,1fr)}
+.num{padding:8px 28px;border-left:1px solid var(--line)}
+.num:first-child{border-left:0;padding-left:0}
+.num b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(52px,6vw,96px);line-height:1;font-variant-numeric:tabular-nums}
+.num b small{font-size:.4em;color:var(--muted)}
+.num span{display:block;margin-top:10px;font-size:14.5px;color:var(--muted)}
+@media (max-width:760px){.nums{grid-template-columns:repeat(2,1fr);row-gap:28px}.num:nth-child(3){border-left:0;padding-left:0}.band{padding-block:72px}}
+
+.case{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:24px;overflow:hidden}
+.case>div{background:var(--surface);padding:32px;min-width:0}
+.case h3{font-family:var(--display);font-weight:400;font-size:32px;line-height:1.05;margin:12px 0}
+.case p{margin:0;color:var(--muted);font-size:16px}
+.wide{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1.2fr;gap:44px;align-items:center}
+.wide>*{min-width:0}
+.race{display:grid;gap:16px}
+.race-row{display:grid;grid-template-columns:150px 1fr 70px;gap:14px;align-items:center;font-size:15px}
+.track{height:12px;border-radius:7px;background:var(--bg2);overflow:hidden}
+.track b{display:block;height:100%;border-radius:7px;transition:width .35s ease}
+.race-row .v{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.slider{display:grid;gap:10px;margin-top:22px}
+.slider-row{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--rose-ink)}
+.cost{border:1px dashed var(--line);border-radius:16px;padding:22px;background:var(--bg2)}
+.formula{font-family:var(--mono);font-size:14.5px;line-height:1.9;margin:12px 0!important;color:var(--ink)!important;overflow-x:auto}
+.case-foot{grid-column:1 / -1;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+@media (max-width:900px){.case{grid-template-columns:1fr}.wide{grid-template-columns:1fr;gap:24px}.race-row{grid-template-columns:110px 1fr 60px}.case>div{padding:24px}}
+
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters button{font:500 13.5px var(--mono);padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--rose);color:#2A170C;border-color:var(--rose)}
+.projects{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.proj{display:flex;flex-direction:column;gap:12px;padding:30px;border-radius:22px;border:1px solid var(--line);background:var(--surface);text-decoration:none;min-width:0;transition:transform .2s,border-color .2s}
+a.proj:hover{transform:translateY(-4px);border-color:var(--rose-ink)}
+.proj h3{font-family:var(--display);font-weight:400;font-size:32px;line-height:1.05}
+.proj p{margin:0;color:var(--muted);font-size:15.5px}
+.proj .go{margin-top:auto;padding-top:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.arrow{font-family:var(--mono);font-size:13.5px;color:var(--rose-ink)}
+@media (max-width:1060px){.projects{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:680px){.projects{grid-template-columns:1fr}}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+.cols>*{min-width:0}
+.tl{list-style:none;margin:20px 0 0;padding:0}
+.tl li{display:grid;grid-template-columns:150px 1fr;gap:20px;padding:22px 0;border-top:1px solid var(--line)}
+.tl li>*{min-width:0}
+.tl .when{font-family:var(--mono);font-size:12.5px;color:var(--muted);padding-top:6px}
+.tl h3{font-family:var(--display);font-weight:400;font-size:28px;line-height:1.1;margin-bottom:6px}
+.tl p{margin:0;color:var(--muted);font-size:15.5px}
+.grade{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:12.5px;color:var(--rose-ink)}
+@media (max-width:900px){.cols{grid-template-columns:1fr;gap:40px}}
+@media (max-width:480px){.tl li{grid-template-columns:1fr;gap:4px}}
+
+.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.skills h3{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.skills ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.skills li{font-size:16px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+@media (max-width:900px){.skills{grid-template-columns:repeat(2,1fr)}}
+
+.contact{padding-block:120px 64px;border-top:1px solid var(--line);position:relative;isolation:isolate;overflow:hidden}
+.contact::before{content:"";position:absolute;z-index:-1;left:50%;top:10%;width:700px;max-width:95vw;aspect-ratio:1;transform:translateX(-50%);background:radial-gradient(closest-side,color-mix(in srgb,var(--rose) 55%,transparent),transparent 70%);pointer-events:none}
+.contact h2{font-family:var(--display);font-weight:400;font-size:clamp(56px,9vw,150px);line-height:.92;letter-spacing:-.02em}
+.contact p{color:var(--muted);max-width:38em;margin:22px 0 30px;font-size:18px}
+footer{padding-block:24px 44px;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line)}
+
+/* role fit */
+.roles{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.roles button{font:500 15px var(--body);padding:11px 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.roles button[aria-selected="true"]{background:var(--tan);color:var(--tan-ink);border-color:var(--tan)}
+.fit{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.fit-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.fit-card .need{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fit-card h3{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.05}
+.fit-card p{margin:0;color:var(--muted);font-size:15.5px}
+.proof{margin-top:auto;padding-top:12px;border-top:1px dashed var(--line);font-size:14.5px}
+.proof b{font-family:var(--mono);font-weight:500;color:var(--rose-ink)}
+.fit-line{margin:28px 0 0;font-family:var(--display);font-size:clamp(24px,2.6vw,34px);line-height:1.2;max-width:28em}
+@media (max-width:900px){.fit{grid-template-columns:1fr}}
+/* next projects */
+.next-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.nx{border:1px dashed var(--line);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:12px;min-width:0;background:color-mix(in srgb,var(--surface) 60%,transparent)}
+.nx h3{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.05}
+.nx p{margin:0;color:var(--muted);font-size:15.5px}
+.chip{align-self:flex-start;font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:999px}
+.chip.now{background:var(--rose);color:#2A170C}
+.chip.soon{border:1px solid var(--line);color:var(--muted)}
+.prog{height:6px;border-radius:4px;background:var(--bg2);overflow:hidden;margin-top:auto}
+.prog b{display:block;height:100%;background:var(--rose-ink);border-radius:4px}
+@media (max-width:900px){.next-grid{grid-template-columns:1fr}}
+/* toolkit */
+.tk{display:grid;grid-template-columns:1.4fr 1fr;gap:36px;align-items:start}
+.tk>*{min-width:0}
+.tk-groups{display:grid;gap:26px}
+.tk-group h3{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.tk-chips{display:flex;flex-wrap:wrap;gap:8px}
+.sk{font:500 15px var(--body);padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:transform .15s,background .15s,border-color .15s,color .15s}
+.sk:hover{transform:translateY(-2px);border-color:var(--rose-ink)}
+.sk[aria-pressed="true"]{background:var(--tan);color:var(--tan-ink);border-color:var(--tan)}
+.sk.lvl3::after{content:" ●";color:var(--rose-ink);font-size:10px;vertical-align:2px}
+.tk-panel{position:sticky;top:96px;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:30px;display:grid;gap:12px;background-image:radial-gradient(500px circle at 100% 0,color-mix(in srgb,var(--rose) 45%,transparent),transparent 60%)}
+.tk-panel h3{font-family:var(--display);font-weight:400;font-size:clamp(40px,4vw,60px);line-height:1}
+.tk-panel p{margin:0;color:var(--muted)}
+.tk-level{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.dots{display:inline-flex;gap:5px}
+.dots i{width:22px;height:8px;border-radius:4px;background:var(--line);display:block}
+.dots i.on{background:var(--rose-ink)}
+.tk-used{display:flex;flex-wrap:wrap;gap:8px}
+.tk-used a,.tk-used span{font-family:var(--mono);font-size:13px;padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--rose) 55%,transparent);color:var(--ink);text-decoration:none}
+.tk-used a:hover{background:var(--rose)}
+@media (max-width:900px){.tk{grid-template-columns:1fr}.tk-panel{position:static}}
+/* notes */
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+.note{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.note h3{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.08}
+.note p{margin:0;color:var(--muted);font-size:15.5px}
+.note .lede{color:var(--ink)}
+.note details{border-top:1px dashed var(--line);padding-top:12px}
+.note summary{cursor:pointer;font-family:var(--mono);font-size:13px;color:var(--rose-ink);list-style:none}
+.note summary::-webkit-details-marker{display:none}
+.note summary::after{content:" ↓"}
+.note details[open] summary::after{content:" ↑"}
+.note details p{margin-top:12px}
+.note code{font-family:var(--mono);font-size:13.5px;background:var(--bg2);padding:1px 6px;border-radius:5px;color:var(--ink)}
+@media (max-width:1000px){.notes{grid-template-columns:1fr}}
+/* recruiters */
+.recruit{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin:0 0 30px}
+.recruit>div{background:var(--surface);padding:18px 20px;min-width:0}
+.recruit dt{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.recruit dd{margin:0;font-size:15.5px}
+@media (max-width:1000px){.recruit{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.recruit{grid-template-columns:1fr}}
+.proj,.lab,.case>div,.fit-card{background-image:radial-gradient(420px circle at var(--mx,-999px) var(--my,-999px),color-mix(in srgb,var(--rose) 35%,transparent),transparent 60%)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="logo" href="#top">Nihal <i>H.K.</i></a>
+  <div class="nav-r"><div class="links"><a href="#fit">Fit</a><a href="#work">Work</a><a href="#projects">Projects</a><a href="#next">Next</a><a href="#notes">Notes</a><a href="#path">Path</a><a href="#skills">Skills</a><a href="#contact">Contact</a></div><a class="theme" href="Nihal_Hamou-Sbira_Ktitu_CV.pdf" target="_blank" rel="noopener" style="text-decoration:none">CV ↓</a><button class="theme" id="theme" type="button" aria-label="Switch theme"><span class="sw"></span><span id="theme-lbl">Dark</span></button></div>
+</div></nav>
+<div class="ticker" aria-hidden="true"><div class="ticker-track">
+  <span><b>HML Sharpe</b> 1963–90 <span class="up">0.63</span></span><span><b>HML Sharpe</b> 1991–2026 <span class="dn">0.23</span></span><span><b>DSR</b> N=10 <span class="up">0.957</span></span><span><b>ARL₀</b> target 120 mo</span><span><b>CUSUM</b> h 3.586</span><span><b>Delay</b> 0.25σ <span class="up">38 mo</span> vs 55</span><span><b>Test bench</b> 1.28M obs</span><span><b>Tests</b> 130 passing</span><span><b>Master</b> avg <span class="up">9.2</span></span><span><b>Thesis</b> <span class="up">10/10</span></span>
+  <span><b>HML Sharpe</b> 1963–90 <span class="up">0.63</span></span><span><b>HML Sharpe</b> 1991–2026 <span class="dn">0.23</span></span><span><b>DSR</b> N=10 <span class="up">0.957</span></span><span><b>ARL₀</b> target 120 mo</span><span><b>CUSUM</b> h 3.586</span><span><b>Delay</b> 0.25σ <span class="up">38 mo</span> vs 55</span><span><b>Test bench</b> 1.28M obs</span><span><b>Tests</b> 130 passing</span><span><b>Master</b> avg <span class="up">9.2</span></span><span><b>Thesis</b> <span class="up">10/10</span></span>
+</div></div>
+
+<header class="hero" id="top"><div class="wrap">
+  <span class="status"><i></i>Open to Data Science &amp; ML roles · Relocating to Switzerland or Canada</span>
+  <h1>Nihal <em>Hamou‑Sbira</em><br>Ktitu</h1>
+  <div class="hero-sub">
+    <div>
+      <p class="role">Data Scientist · Machine Learning Engineer</p>
+      <p class="pitch">I build ML systems end to end, from raw data to a deployed app. My focus is finance, and one question in particular: <em>is this model still working, or did it just get lucky?</em></p>
+      <div class="cta">
+        <a class="btn primary" href="#work">See my work</a>
+        <a class="btn" href="Nihal_Hamou-Sbira_Ktitu_CV.pdf" target="_blank" rel="noopener">Download CV ↓</a>
+        <a class="btn" href="https://github.com/nihalhk-dev" target="_blank" rel="noopener">GitHub ↗</a>
+        <button class="btn" id="copy-mail" type="button">Copy email</button>
+      </div>
+    </div>
+    <div class="lab" aria-label="Interactive demo of a CUSUM detector">
+      <div class="lab-top"><span class="eyebrow">Try it · the detector from my thesis</span><span class="state" id="state">● healthy</span></div>
+      <canvas id="cv" aria-hidden="true"></canvas>
+      <div class="meter-row"><span>CUSUM evidence</span><span id="sval">0.0 / 5.0</span></div>
+      <div class="bar" id="bar"><b></b></div>
+      <div class="lab-ctl">
+        <button class="btn primary" id="inject" type="button">Inject a decay</button>
+        <button class="btn" id="reset" type="button">Reset</button>
+        <span class="note" id="note">Each dot is one month of a model's score. Noise alone rarely fills the bar.</span>
+      </div>
+    </div>
+  </div>
+</div></header>
+
+<div class="band alt"><div class="wrap">
+  <div class="nums">
+    <div class="num"><b>9.2<small>/10</small></b><span>Master's average grade</span></div>
+    <div class="num"><b>10<small>/10</small></b><span>Master's thesis</span></div>
+    <div class="num"><b>130</b><span>automated tests in my thesis</span></div>
+    <div class="num"><b>4</b><span>languages: Spanish, Arabic, English, German (learning)</span></div>
+  </div>
+</div></div>
+
+
+<section class="band" id="fit"><div class="wrap">
+  <div class="sec-title"><h2>Why I fit <em>your team</em></h2><span class="eyebrow">Pick the role you're hiring for</span></div>
+  <div class="roles" role="tablist" aria-label="Role">
+    <button role="tab" aria-selected="true" data-r="ds">Data Scientist</button>
+    <button role="tab" aria-selected="false" data-r="mle">ML Engineer</button>
+    <button role="tab" aria-selected="false" data-r="mrm">Model Risk &amp; Validation</button>
+    <button role="tab" aria-selected="false" data-r="ai">AI / LLM Engineer</button>
+  </div>
+  <div class="fit" id="fit-cards"></div>
+  <p class="fit-line" id="fit-line"></p>
+</div></section>
+
+<section class="band alt" id="work"><div class="wrap">
+  <div class="sec-title"><h2>Signal <em>Watch</em></h2><span class="eyebrow">Master's thesis · graded 10/10</span></div>
+  <div class="case">
+    <div><span class="eyebrow">The problem</span><h3>Models decay quietly</h3><p>Fixed rules are common for deciding when a model needs review, but how many false alarms they give, and how long they take to notice a real drop, is rarely measured.</p></div>
+    <div><span class="eyebrow">The method</span><h3>Sequential detection</h3><p>CUSUM and Page-Hinkley detectors, with each model's alarm threshold calibrated on its own history to give one false alarm every ten years.</p></div>
+    <div><span class="eyebrow">The validation</span><h3>Where the answer is known</h3><p>A synthetic credit-model test bench with 1.28M observations and known change points, plus 60+ years of real market data.</p></div>
+
+    <div class="wide">
+      <div><span class="eyebrow">The result</span><h3>Small drops take years. Big ones, months.</h3>
+        <p>Months to confirm a drop injected into real market noise, at the same false-alarm rate. Move the slider to change the size of the drop.</p>
+        <div class="slider">
+          <div class="slider-row"><span>Size of the drop</span><span id="dlab">0.25σ · like the 2010s</span></div>
+          <input type="range" id="delta" min="0" max="4" step="1" value="1" aria-label="Size of the drop">
+          <div class="slider-row"><span>subtle</span><span>large</span></div>
+        </div>
+      </div>
+      <div class="race" aria-live="polite">
+        <div class="race-row"><span>CUSUM</span><span class="track"><b id="b1" style="background:var(--rose-ink)"></b></span><span class="v" id="v1"></span></div>
+        <div class="race-row"><span>Single-month rule</span><span class="track"><b id="b2" style="background:var(--tan)"></b></span><span class="v" id="v2"></span></div>
+        <p class="eyebrow" id="gain" style="margin:0"></p>
+      </div>
+    </div>
+
+    <div class="wide">
+      <div><span class="eyebrow">Next step</span><h3>Put a price on every alarm</h3><p>My supervisor's feedback was to close the use case with a model in production and its real intervention costs. The next step is to measure how much money is lost: each false alarm costs a review, and each month a decayed model stays in use costs bad decisions. The threshold would then be chosen to minimise that total cost.</p></div>
+      <div class="cost"><span class="eyebrow">Expected cost</span>
+        <p class="formula">cost = <b style="color:var(--tan)">false alarms</b> × review cost<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <b style="color:var(--rose-ink)">months of delay</b> × cost of a decayed month</p>
+        <p style="font-size:14px">Both terms come from curves I already measure. What is missing are a bank's real costs.</p></div>
+    </div>
+
+    <div class="case-foot">
+      <div class="tags"><span class="tag">Python</span><span class="tag">pandas</span><span class="tag">Streamlit</span><span class="tag">pytest</span><span class="tag">CI</span><span class="tag">PDF reports</span></div>
+      <a class="btn" href="https://github.com/nihalhk-dev/signal-watch" target="_blank" rel="noopener">View repository ↗</a>
+    </div>
+  </div>
+</div></section>
+
+<section class="band" id="projects"><div class="wrap">
+  <div class="sec-title"><h2>More <em>work</em></h2>
+    <div class="filters" role="group" aria-label="Filter projects">
+      <button type="button" data-f="all" aria-pressed="true">All</button>
+      <button type="button" data-f="ml" aria-pressed="false">ML</button>
+      <button type="button" data-f="genai" aria-pressed="false">GenAI</button>
+      <button type="button" data-f="data" aria-pressed="false">Data</button>
+    </div>
+  </div>
+  <div class="projects">
+    <a class="proj" data-c="genai" href="https://github.com/nihalhk-dev/proyecto-rag" target="_blank" rel="noopener">
+      <span class="eyebrow">Generative AI · RAG</span><h3>QuantAsistente</h3>
+      <p>A quantitative-finance assistant over ~160 pages of academic material. Every answer cites its document and page, with conversation memory and a deployed Streamlit app.</p>
+      <span class="go"><span class="tags"><span class="tag">LangChain</span><span class="tag">LangGraph</span><span class="tag">ChromaDB</span></span><span class="arrow">repo ↗</span></span>
+    </a>
+    <a class="proj" data-c="ml" href="https://github.com/nihalhk-dev/Modelo_Probabilidad_Recompra" target="_blank" rel="noopener">
+      <span class="eyebrow">Machine learning · Retail</span><h3>Repurchase probability</h3>
+      <p>Predicts each customer's probability of buying again on Online Retail II, and segments customers for retention actions.</p>
+      <span class="go"><span class="tags"><span class="tag">Python</span><span class="tag">CatBoost</span></span><span class="arrow">repo ↗</span></span>
+    </a>
+    <a class="proj" data-c="data" href="https://github.com/nihalhk-dev/loans" target="_blank" rel="noopener">
+      <span class="eyebrow">Data engineering · Credit</span><h3>LendingClub analytics</h3>
+      <p>A layered SQL pipeline for default-risk analysis, with data-quality checks, an audit-log trigger, a risk-scoring function and materialized views.</p>
+      <span class="go"><span class="tags"><span class="tag">PostgreSQL</span><span class="tag">SQL</span></span><span class="arrow">repo ↗</span></span>
+    </a>
+    <a class="proj" data-c="ml" href="https://github.com/nihalhk-dev/nlp-reviews-trustpilots" target="_blank" rel="noopener">
+      <span class="eyebrow">NLP</span><h3>Trustpilot reviews</h3>
+      <p>NLP on easyJet customer reviews from Trustpilot to find what drives satisfaction.</p>
+      <span class="go"><span class="tags"><span class="tag">Python</span><span class="tag">NLP</span></span><span class="arrow">repo ↗</span></span>
+    </a>
+    <a class="proj" data-c="data" href="https://github.com/nihalhk-dev/practica_final_hamou_sbira_ktitu_nihal" target="_blank" rel="noopener">
+      <span class="eyebrow">Statistics</span><h3>Applied statistics</h3>
+      <p>Descriptive analysis, statistical inference, multiple regression and time-series modelling in Python.</p>
+      <span class="go"><span class="tags"><span class="tag">Python</span><span class="tag">Statistics</span></span><span class="arrow">repo ↗</span></span>
+    </a>
+    <div class="proj" data-c="data">
+      <span class="eyebrow">Software engineering</span><h3>Backend &amp; automation</h3>
+      <p>A marketplace backend (authentication, roles, listings) and business workflow automation with Python and n8n, from my developer roles.</p>
+      <span class="go"><span class="tags"><span class="tag">Python</span><span class="tag">PHP</span><span class="tag">Docker</span></span></span>
+    </div>
+  </div>
+</div></section>
+
+
+<section class="band alt" id="next"><div class="wrap">
+  <div class="sec-title"><h2>What I'm <em>building next</em></h2><span class="eyebrow">Personal projects &amp; learning</span></div>
+  <div class="next-grid">
+    <article class="nx"><span class="chip now">In progress</span><h3>Signal Watch: cost of an alarm</h3><p>Choosing each model's alarm threshold by expected cost (reviews vs. months with a decayed model) instead of a fixed false-alarm rate. My supervisor's suggested next step.</p><div class="prog" aria-label="About 20% done"><b style="width:20%"></b></div></article>
+    <article class="nx"><span class="chip soon">Planned</span><h3>Credit model monitoring</h3><p>Plugging a real credit-scoring model into the monitor: a LendingClub scorecard with its AUC tracked by loan vintage, including the delay before loan outcomes are known.</p></article>
+    <article class="nx"><span class="chip soon">Planned</span><h3>Signal Watch, live</h3><p>Deploying the Signal Watch dashboard as a public web app, so anyone can explore the alarms, the delay curves and the model reports without installing anything.</p></article>
+    <article class="nx"><span class="chip now">In progress</span><h3>German for Switzerland</h3><p>Learning German to work in Zurich. Currently at a basic level and studying regularly.</p><div class="prog" aria-label="Basic level"><b style="width:25%"></b></div></article>
+  </div>
+</div></section>
+
+<section class="band" id="notes"><div class="wrap">
+  <div class="sec-title"><h2>Field <em>notes</em></h2><span class="eyebrow">Short write-ups from my work</span></div>
+  <div class="notes">
+    <article class="note">
+      <span class="eyebrow">Model monitoring · 3 min</span>
+      <h3>Why a fixed PSI threshold can hide a model's decay</h3>
+      <p class="lede">PSI &gt; 0.25 is a common trigger for reviewing a model. It's simple and useful, but it answers a different question than the one we usually care about.</p>
+      <details><summary>Read the note</summary>
+        <p>PSI measures how much the population has shifted, not whether the model got worse. The two can move separately: customers can change while the model keeps ranking them well, and a model can lose accuracy on a population that looks stable.</p>
+        <p>A fixed threshold also ignores sample size. The same 0.25 means something very different with 200 observations than with 20,000. In my synthetic test bench, with about 800 observations per period and drops of the sizes I tested, PSI &gt; 0.25 did not fire in any of 15 scenarios, while detectors calibrated on each model's history did.</p>
+        <p>That doesn't make PSI useless. It's a good input check. But to know whether performance has really decayed, I'd monitor the performance metric itself, with a threshold calibrated to a known false-alarm rate.</p>
+      </details>
+    </article>
+    <article class="note">
+      <span class="eyebrow">Statistics · 5 min</span>
+      <h3>CUSUM in five minutes</h3>
+      <p class="lede">The detector at the heart of my thesis fits in one line, and the idea behind it is very intuitive: small bad months add up.</p>
+      <details><summary>Read the note</summary>
+        <p>Each month I measure how far the metric fell below its normal level, in standard deviations: <code>y = (μ₀ − x) / σ</code>. The CUSUM keeps a running sum, <code>S = max(0, S + y − k)</code>. The allowance <code>k = 0.5</code> stops normal noise from filling it up, and the <code>max(0, …)</code> means good months can't be "saved up".</p>
+        <p>When <code>S</code> crosses a threshold <code>h</code>, it raises an alarm and resets. I choose <code>h</code> so that, on the model's own history, a healthy model triggers about one false alarm every 120 months.</p>
+        <p>A rule that only looks at the latest month needs one extreme value to react. CUSUM reacts to a run of slightly weak months, which is how real decay usually looks. The price is a delay: the smaller the drop, the longer it takes to be sure.</p>
+      </details>
+    </article>
+    <article class="note">
+      <span class="eyebrow">Validation · 4 min</span>
+      <h3>Measuring a detector when the answer is unknown</h3>
+      <p class="lede">On real data nobody knows the month a model started to decay, so you can't directly measure how late an alarm was. Here's the workaround I used.</p>
+      <details><summary>Read the note</summary>
+        <p>I took the real noise of the series, resampled it in six-month blocks to build 1,000 new histories with the same texture, and injected a drop of known size at a known month. Then I counted how long each detector took to fire. This is a standard technique from quality control, applied to a financial series.</p>
+        <p>Then I checked the calibration out of sample: I set the thresholds on alternating 12-month blocks and measured on the others, and the other way round. The promised one-false-alarm-every-120-months came out anywhere between about half and double.</p>
+        <p>The lesson I took from it: a false-alarm rate is an estimate, not a guarantee. In practice it needs monitoring too.</p>
+      </details>
+    </article>
+  </div>
+</div></section>
+
+<section class="band alt" id="path"><div class="wrap">
+  <div class="sec-title"><h2>The <em>path</em></h2></div>
+  <div class="cols">
+    <div><span class="eyebrow">Education</span>
+      <ul class="tl">
+        <li><span class="when">Jan 2026 – Sep 2026</span><div><h3>Master's in Data Science &amp; AI</h3><p style="color:var(--ink);margin-bottom:4px">Evolve, Madrid</p><p>Machine learning, statistics, time series, NLP, generative AI and MLOps.</p><span class="grade">Average 9.2/10 · Thesis 10/10</span></div></li>
+        <li><span class="when">Sep 2022 – Jul 2024</span><div><h3>Higher Technical Degree, Multiplatform App Development</h3><p style="color:var(--ink);margin-bottom:4px">EEP iGroup, Madrid</p><p>Software lifecycle, OOP, databases, APIs and testing.</p><span class="grade">Average 8.66/10 · Final project 10/10</span></div></li>
+      </ul>
+      <span class="eyebrow" style="display:block;margin-top:28px">Certifications</span>
+      <ul class="tl">
+        <li><span class="when">Completed</span><div><h3>Google Cloud Data Analytics</h3><p>Cloud-based data processing, analysis and visualisation.</p></div></li>
+        <li><span class="when">Starting now</span><div><h3>Azure AI MLOps Engineer Associate</h3><p>Microsoft exam AI-300: deploying, monitoring and operating ML and generative AI models.</p><span class="grade">In progress</span></div></li>
+      </ul>
+    </div>
+    <div><span class="eyebrow">Experience</span>
+      <ul class="tl">
+        <li><span class="when">Dec 2024 – Feb 2026</span><div><h3>AI Reviewer · LLM evaluation</h3><p>Evaluated LLM outputs for accuracy and reasoning, and gave structured feedback to improve model responses.</p></div></li>
+        <li><span class="when">Oct 2024 – Feb 2025</span><div><h3>Freelance Backend Developer</h3><p>Designed the database and core backend of a marketplace platform.</p></div></li>
+        <li><span class="when">Jan 2024 – Jul 2024</span><div><h3>Junior Software Developer</h3><p>Automated business workflows with Python and n8n; built MVC web apps with PHP and MySQL.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="band" id="skills"><div class="wrap">
+  <div class="sec-title"><h2>The <em>toolkit</em></h2><span class="eyebrow">Tap a skill to see where I used it</span></div>
+  <div class="tk">
+    <div class="tk-groups" id="tk-groups"></div>
+    <aside class="tk-panel" aria-live="polite">
+      <span class="eyebrow" id="tk-cat">Machine learning</span>
+      <h3 id="tk-name">Python</h3>
+      <div class="tk-level"><span>Confidence</span><span class="dots" id="tk-dots"></span></div>
+      <p id="tk-desc"></p>
+      <span class="eyebrow">Used in</span>
+      <div class="tk-used" id="tk-used"></div>
+    </aside>
+  </div>
+</div></section>
+
+<section class="contact" id="contact"><div class="wrap">
+  <span class="eyebrow">Contact</span>
+  <h2>Let's build something <em>reliable.</em></h2>
+  <p>I'm looking for data science and machine learning engineering roles in Switzerland (Zurich, Geneva) or anywhere in Canada (Toronto, Ottawa, Calgary and beyond), especially in banking and finance. I'm based in Madrid and ready to relocate.</p>
+  <dl class="recruit">
+    <div><dt>Work permit</dt><dd>EU citizen, eligible to work in Switzerland. Canada: work permit needed</dd></div>
+    <div><dt>Availability</dt><dd>Immediately</dd></div>
+    <div><dt>Location</dt><dd>Madrid, ready to relocate to Switzerland or Canada</dd></div>
+    <div><dt>Looking for</dt><dd>Full-time Data Scientist or ML Engineer roles</dd></div>
+    <div><dt>Languages</dt><dd>Spanish and Arabic (native), English (fluent), German (learning)</dd></div>
+  </dl>
+  <div class="cta"><span class="mail" id="mail">nihalhk.dev@gmail.com</span><button class="btn primary" id="copy-mail2" type="button">Copy email</button><a class="btn" href="Nihal_Hamou-Sbira_Ktitu_CV.pdf" target="_blank" rel="noopener">Download CV ↓</a><a class="btn" href="https://github.com/nihalhk-dev" target="_blank" rel="noopener">GitHub ↗</a></div>
+</div></section>
+
+<div class="wrap"><footer><span>© 2026 Nihal Hamou-Sbira Ktitu</span><span style="font-family:var(--mono)">Madrid → Switzerland · Canada</span></footer></div>
+
+<script>
+(function(){
+
+  // theme toggle
+  const root=document.documentElement,tb=document.getElementById("theme"),tl=document.getElementById("theme-lbl");
+  function setTheme(t){root.dataset.theme=t;tl.textContent=t==="dark"?"Light":"Dark";try{localStorage.setItem("nhk-theme",t)}catch(e){}try{ui()}catch(e){}}
+  let saved=null;try{saved=localStorage.getItem("nhk-theme")}catch(e){}
+  setTheme(saved==="dark"?"dark":"light");
+  tb.addEventListener("click",()=>setTheme(root.dataset.theme==="dark"?"light":"dark"));
+  const mail=document.getElementById("mail").textContent;
+  for(const id of ["copy-mail","copy-mail2"]){
+    const b=document.getElementById(id), label=b.textContent;
+    b.addEventListener("click",()=>{
+      const done=t=>{b.textContent=t;setTimeout(()=>b.textContent=label,1800)};
+      try{navigator.clipboard.writeText(mail).then(()=>done("Copied"),()=>done(mail))}catch(e){done(mail)}
+    });
+  }
+
+  const fb=[...document.querySelectorAll(".filters button")], cards=[...document.querySelectorAll(".proj")];
+  fb.forEach(b=>b.addEventListener("click",()=>{fb.forEach(x=>x.setAttribute("aria-pressed",x===b));cards.forEach(c=>c.hidden=!(b.dataset.f==="all"||c.dataset.c===b.dataset.f));}));
+
+
+  // role fit
+  const R={
+    ds:{cards:[["Statistics you can defend","Statistical modelling","Inference, regression, time series, and validation that separates real effects from noise.","<b>Signal Watch</b> · out-of-sample checks, Deflated Sharpe"],["Models with business impact","Predictive modelling","From raw data to a model a team can act on, with clear metrics.","<b>Repurchase model</b> · CatBoost, customer segmentation"],["Clear communication","Storytelling with data","Dashboards and reports that a non-technical reviewer can read and sign.","<b>Signal Watch</b> · Streamlit app, PDF reports"]],line:"I care about the question behind the number: <em>is this result real?</em>"},
+    mle:{cards:[["Production-minded code","Software engineering","I worked as a backend and automation developer before moving into ML.","<b>130 tests</b> · CI, reproducible pipelines"],["End to end, deployed","ML systems","Data ingestion, models, apps and deployment, not just notebooks.","<b>2 Streamlit apps</b> · Signal Watch and the RAG assistant"],["Reproducibility","MLOps","Every result carries a fingerprint of its data, config and code.","<b>Signal Watch</b> · hashes, sealed test reports"]],line:"A software developer who learned ML, so <em>it ships, it's tested, and it's reproducible.</em>"},
+    mrm:{cards:[["Ongoing monitoring","Performance monitoring","Detecting when a model's performance really decays, with a known false-alarm rate.","<b>Signal Watch</b> · CUSUM, Page-Hinkley"],["Rigorous validation","Validation design","Synthetic data with known change points, then real data, then out-of-sample checks.","<b>1.28M</b> observations in the test bench"],["Audit-ready evidence","Documentation","A report per model with thresholds, alarms, limitations and a blank decision box.","<b>PDF report</b> · the analyst signs, the tool doesn't decide"]],line:"My thesis is a model-monitoring tool, <em>built the way a validation team would review it.</em>"},
+    ai:{cards:[["Retrieval-augmented apps","RAG","Grounded LLM answers with citations to the source document and page.","<b>QuantAsistente</b> · LangChain, ChromaDB, Gemini"],["Agents and memory","LLM orchestration","Conversation memory and multi-step flows with LangGraph.","<b>QuantAsistente</b> · LangGraph, Streamlit"],["Knowing when a model is wrong","LLM evaluation","Over a year reviewing LLM outputs for accuracy and reasoning.","<b>AI Reviewer</b> · Dec 2024 – Feb 2026"]],line:"I've built LLM apps and <em>graded LLM outputs for a living.</em>"}
+  };
+  const tabs=[...document.querySelectorAll(".roles button")],fc=document.getElementById("fit-cards"),fl=document.getElementById("fit-line");
+  function showRole(k){tabs.forEach(t=>t.setAttribute("aria-selected",t.dataset.r===k));
+    fc.innerHTML=R[k].cards.map(([h,n,p,pr])=>`<article class="fit-card"><span class="need">${n}</span><h3>${h}</h3><p>${p}</p><p class="proof">${pr}</p></article>`).join("");fl.innerHTML=R[k].line;
+    fc.querySelectorAll(".fit-card").forEach(el=>el.addEventListener("pointermove",e=>{const r=el.getBoundingClientRect();el.style.setProperty("--mx",(e.clientX-r.left)+"px");el.style.setProperty("--my",(e.clientY-r.top)+"px")}));}
+  tabs.forEach(t=>t.addEventListener("click",()=>showRole(t.dataset.r)));showRole("ds");
+
+
+  // toolkit
+  const P={sw:["Signal Watch","#work"],rag:["QuantAsistente","https://github.com/nihalhk-dev/proyecto-rag"],rec:["Repurchase model","https://github.com/nihalhk-dev/Modelo_Probabilidad_Recompra"],lc:["LendingClub analytics","https://github.com/nihalhk-dev/loans"],nlp:["Trustpilot NLP","https://github.com/nihalhk-dev/nlp-reviews-trustpilots"],st:["Applied statistics","https://github.com/nihalhk-dev/practica_final_hamou_sbira_ktitu_nihal"],job:["Developer roles",null],rev:["AI Reviewer role",null],dam:["DAM degree",null]};
+  const G=[
+   ["Machine learning",[["Python",3,"My main language for data, models and apps.",["sw","rag","rec","nlp","st"]],["scikit-learn",2,"Model training, evaluation and pipelines.",["rec","st"]],["CatBoost",2,"Gradient boosting for tabular prediction.",["rec"]],["pandas · NumPy",3,"Data wrangling and numerical work behind every project.",["sw","rec","st","nlp"]],["Statistical inference",3,"Tests, confidence intervals and knowing when a result is noise.",["sw","st"]],["Time series",2,"Monthly performance series, autocorrelation and forecasting basics.",["sw","st"]],["Change detection",3,"CUSUM and Page-Hinkley, calibrated to a chosen false-alarm rate.",["sw"]]]],
+   ["LLMs",[["RAG",3,"Retrieval over documents with cited, grounded answers.",["rag"]],["LangChain",2,"Loaders, splitters, retrievers and prompts.",["rag"]],["LangGraph",2,"Agent flow with conversation memory.",["rag"]],["ChromaDB",2,"Vector store for semantic search.",["rag"]],["LLM evaluation",3,"Over a year grading LLM outputs for accuracy and reasoning.",["rev"]]]],
+   ["MLOps",[["pytest",3,"Unit, integration and methodology tests that guard the results.",["sw"]],["CI",2,"Tests run automatically on every change.",["sw"]],["Docker",2,"Consistent environments for apps and services.",["job"]],["Streamlit",3,"Interactive apps for monitoring and LLM tools.",["sw","rag"]],["Git · GitHub",3,"Version control and collaboration on every project.",["sw","rag","rec","lc","nlp","st"]]]],
+   ["Data & software",[["SQL · PostgreSQL",2,"Layered schemas, quality checks, triggers and materialized views.",["lc"]],["MySQL",2,"Relational databases for web apps.",["job"]],["REST APIs",2,"Designing and integrating APIs in backend work.",["job","dam"]],["Java · Kotlin · C#",2,"Object-oriented languages from my software degree.",["dam"]],["TypeScript",1,"Front-end and full-stack projects during my degree.",["dam"]]]]
+  ];
+  const groups=document.getElementById("tk-groups");
+  groups.innerHTML=G.map(([g,items],gi)=>`<div class="tk-group"><h3>${g}</h3><div class="tk-chips">${items.map((it,ii)=>`<button type="button" class="sk ${it[1]===3?"lvl3":""}" data-g="${gi}" data-i="${ii}" aria-pressed="false">${it[0]}</button>`).join("")}</div></div>`).join("");
+  const chips=[...groups.querySelectorAll(".sk")];
+  function pick(btn){chips.forEach(c=>c.setAttribute("aria-pressed",c===btn));
+    const g=G[btn.dataset.g],[n,l,d,u]=g[1][btn.dataset.i];
+    document.getElementById("tk-cat").textContent=g[0];document.getElementById("tk-name").textContent=n;document.getElementById("tk-desc").textContent=d;
+    document.getElementById("tk-dots").innerHTML=[1,2,3].map(k=>`<i class="${k<=l?"on":""}"></i>`).join("");
+    document.getElementById("tk-used").innerHTML=u.map(k=>{const [t,h]=P[k];return h?`<a href="${h}"${h.startsWith("http")?' target="_blank" rel="noopener"':""}>${t}</a>`:`<span>${t}</span>`}).join("");}
+  chips.forEach(c=>{c.addEventListener("click",()=>pick(c));c.addEventListener("mouseenter",()=>{if(matchMedia("(hover:hover)").matches)pick(c)})});
+  pick(chips[0]);
+
+  // thesis results: step drop injected into real HML noise, same false-alarm rate (months)
+  const D=[["0.15σ · very subtle",53.6,65.9],["0.25σ · like the 2010s",37.7,55.0],["0.5σ · moderate",18.4,27.4],["1σ · clear",7.2,11.1],["2σ · large",2.8,3.5]];
+  const sl=document.getElementById("delta");
+  function race(){const [l,a,b]=D[+sl.value];document.getElementById("dlab").textContent=l;
+    document.getElementById("b1").style.width=(a/66*100)+"%";document.getElementById("b2").style.width=(b/66*100)+"%";
+    document.getElementById("v1").textContent=a.toFixed(1)+" mo";document.getElementById("v2").textContent=b.toFixed(1)+" mo";
+    document.getElementById("gain").textContent=`CUSUM confirms it ${(b-a).toFixed(1)} months earlier`;}
+  sl.addEventListener("input",race);race();
+
+  const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+  const stateEl=document.getElementById("state"),bar=document.getElementById("bar"),sval=document.getElementById("sval"),note=document.getElementById("note");
+  const K=0.5,H=5,N=60,reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let seed=11;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+  const gauss=()=>{const u=rnd()||1e-9,v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
+  let pts=[],S=0,drift=false,alarm=false,t=0,driftAt=null,alarmAt=null;
+  const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  function reset(){pts=[];S=0;drift=false;alarm=false;t=0;driftAt=null;alarmAt=null;for(let i=0;i<N;i++)step(true);ui();}
+  function step(silent){const x=gauss()-(drift?1.3:0);if(!alarm){S=Math.max(0,S-x-K);if(S>H){alarm=true;alarmAt=t;}}
+    pts.push({x,d:drift,a:alarm&&alarmAt===t});if(pts.length>N)pts.shift();t++;if(!silent)ui();}
+  function ui(){
+    const w=cv.clientWidth,h=cv.clientHeight,dpr=devicePixelRatio||1;
+    if(cv.width!==Math.round(w*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr)}
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+    const Y=v=>h/2-v*h/8,X=i=>8+i*(w-16)/(N-1),cl=v=>Math.max(-3.6,Math.min(3.6,v));
+    ctx.strokeStyle=css("--line");ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(0,Y(0));ctx.lineTo(w,Y(0));ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=css("--muted");ctx.font="11px Geist Mono, monospace";ctx.fillText("expected level",8,Y(0)-7);
+    ctx.strokeStyle=css("--tan");ctx.lineWidth=1.5;ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(X(i),Y(cl(p.x))):ctx.moveTo(X(i),Y(cl(p.x))));ctx.stroke();
+    pts.forEach((p,i)=>{ctx.fillStyle=p.a?css("--alarm"):(p.d?css("--rose-ink"):css("--muted"));ctx.beginPath();ctx.arc(X(i),Y(cl(p.x)),p.a?6:2.5,0,7);ctx.fill();});
+    const pct=Math.min(100,S/H*100);bar.firstElementChild.style.width=(alarm?100:pct)+"%";bar.classList.toggle("hot",alarm||pct>70);
+    sval.textContent=(alarm?H.toFixed(1)+"+":S.toFixed(1))+" / "+H.toFixed(1);
+    stateEl.className="state"+(alarm?" alarm":drift?" drift":"");stateEl.textContent=alarm?"● alarm":drift?"● decaying…":"● healthy";
+    if(alarm)note.textContent=`Alarm after ${alarmAt-driftAt+1} months of decay. Small, persistent drops add up until they cross the threshold.`;
+  }
+  document.getElementById("inject").addEventListener("click",()=>{if(!drift&&!alarm){drift=true;driftAt=t;note.textContent="The model is now slightly worse each month. Watch the evidence build up.";if(reduce){while(!alarm&&t-driftAt<200)step(true);ui();}}});
+  document.getElementById("reset").addEventListener("click",()=>{seed=11+Math.floor(Math.random()*1000);reset();note.textContent="Each dot is one month of a model's score. Noise alone rarely fills the bar.";});
+  reset();addEventListener("resize",ui);
+  if(!reduce)setInterval(()=>{if(!document.hidden)step(false)},380);
+
+  document.querySelectorAll(".proj,.lab,.case>div").forEach(el=>el.addEventListener("pointermove",e=>{const r=el.getBoundingClientRect();el.style.setProperty("--mx",(e.clientX-r.left)+"px");el.style.setProperty("--my",(e.clientY-r.top)+"px")}));
+})();
+</script>
+
+</body>
+</html>
